@@ -12,6 +12,9 @@ abstract class _MainPageViewModelBase with Store {
   @observable
   List<MainPageModel> filteredList = [];
 
+  @observable
+  bool close = true;
+
   MainPageService mainPageService;
 
   _MainPageViewModelBase({required this.mainPageService}) {
@@ -34,5 +37,10 @@ abstract class _MainPageViewModelBase with Store {
         filteredList.add(e);
       }
     });
+  }
+
+  @action
+  void changeClose() {
+    close = !close;
   }
 }

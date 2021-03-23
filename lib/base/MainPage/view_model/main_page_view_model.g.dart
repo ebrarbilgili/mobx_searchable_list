@@ -39,6 +39,21 @@ mixin _$MainPageViewModel on _MainPageViewModelBase, Store {
     });
   }
 
+  final _$closeAtom = Atom(name: '_MainPageViewModelBase.close');
+
+  @override
+  bool get close {
+    _$closeAtom.reportRead();
+    return super.close;
+  }
+
+  @override
+  set close(bool value) {
+    _$closeAtom.reportWrite(value, super.close, () {
+      super.close = value;
+    });
+  }
+
   final _$controllerAtom = Atom(name: '_MainPageViewModelBase.controller');
 
   @override
@@ -76,10 +91,22 @@ mixin _$MainPageViewModel on _MainPageViewModelBase, Store {
   }
 
   @override
+  void changeClose() {
+    final _$actionInfo = _$_MainPageViewModelBaseActionController.startAction(
+        name: '_MainPageViewModelBase.changeClose');
+    try {
+      return super.changeClose();
+    } finally {
+      _$_MainPageViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 dataList: ${dataList},
 filteredList: ${filteredList},
+close: ${close},
 controller: ${controller}
     ''';
   }

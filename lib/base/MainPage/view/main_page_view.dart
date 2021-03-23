@@ -7,26 +7,15 @@ import 'package:mobx_searchable_list/constants/service_constants.dart';
 
 part 'main_page_strings.dart';
 
-class MainPageView extends StatefulWidget {
-  MainPageView({Key? key}) : super(key: key);
-
-  @override
-  _MainPageViewState createState() => _MainPageViewState();
-}
-
-class _MainPageViewState extends State<MainPageView>
-    with _MainPageStringValues {
+class MainPageView extends StatelessWidget with _MainPageStringValues {
   final viewModel = MainPageViewModel(
     mainPageService: MainPageService(
       service: Dio(BaseOptions(baseUrl: ServicePath.BASEURL.values)),
     ),
   );
 
-  final TextEditingController controller = TextEditingController();
-
   Icon get searchIcon => Icon(Icons.search);
   Icon get closeIcon => Icon(Icons.close);
-  bool close = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,22 +23,22 @@ class _MainPageViewState extends State<MainPageView>
       appBar: AppBar(
         title: Text(title),
         actions: [
-          IconButton(
-            icon: close ? searchIcon : closeIcon,
-            onPressed: () {
-              setState(() {
+          Observer(
+            builder: (context) => IconButton(
+              icon: viewModel.close ? searchIcon : closeIcon,
+              onPressed: () {
                 viewModel.search();
 
-                close = !close;
-              });
-            },
-          )
+                viewModel.changeClose();
+              },
+            ),
+          ),
         ],
       ),
       body: Observer(
         builder: (context) => ListView(
           children: [
-            close
+            viewModel.close
                 ? SizedBox()
                 : TextField(
                     controller: viewModel.controller,
